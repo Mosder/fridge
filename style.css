@@ -1,0 +1,60 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+}
+p {
+    position: fixed;
+    right: 10px;
+    margin: 0;
+}
+#total {
+    top: 10px;
+}
+#on {
+    top: 30px;
+}
+#add {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    margin: 0;
+    cursor: pointer;
+    background: url("icons/add.png");
+    background-size: 25px;
+    width: 25px;
+    height: 25px;
+    border: none;
+}
+.magnet {
+    position: absolute;
+    border: 1px solid black;
+    cursor: pointer;
+    padding: 20px;
+}
+.del {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    border: none;
+    background: url("icons/del.png");
+    background-size: 17px;
+}
+.resizer {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 17px;
+    height: 17px;
+    cursor: nwse-resize;
+    background: url("icons/resize.png");
+    background-size: 17px;
+}
+.content {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+}
