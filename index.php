@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fridge</title>
     <link rel="stylesheet" href="style.css">
+    <script
+        src="https://cdn.tiny.cloud/1/s50o1drzeq136sblv5lon7ji7r5esiq2o5ycwl1kwwypxa91/tinymce/5/tinymce.min.js"></script>
     <script src="./dist/index.bundle.js" defer></script>
 </head>
 
@@ -14,6 +16,9 @@
     <button id="add"></button>
     <p id="total">Total: 0</p>
     <p id="on">On: 0</p>
+    <div id="editor">
+        <textarea id="tinymce"></textarea>
+    </div>
 </body>
 
 </html>

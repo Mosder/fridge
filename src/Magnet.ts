@@ -1,3 +1,5 @@
+// import * as tinymce from "tinymce";
+
 class Magnet {
     private x: number;
     private y: number;
@@ -8,13 +10,14 @@ class Magnet {
     readonly id: number;
     static startSize: number = 100;
     static startOffset: number = 40;
-    static startContent: string = "NEW JOB!!!\n\n\n\n\n\n\n\n\n\n\n\n\nssssssssssssssssssssss";
+    static startContent: string = "NEW JOB!!!";
 
     constructor(id: number) {
         this.id = id;
         this.div = this.createDiv();
         this.resize(Magnet.startSize, Magnet.startSize);
         this.move(Magnet.startOffset, Magnet.startOffset);
+        this.getOnTop();
     }
 
     private createDiv(): HTMLDivElement {
@@ -33,9 +36,18 @@ class Magnet {
         resizer.onmousedown = (e: MouseEvent) => { this.resizerFocus(e) };
         div.appendChild(resizer);
 
+        let edit = document.createElement("button");
+        edit.className = "edit";
+        edit.onclick = () => {
+            this.getOnTop();
+            editMagnet(this);
+        };
+        div.appendChild(edit);
+
         this.contentDiv = document.createElement("div");
         this.contentDiv.className = "content";
-        this.contentDiv.innerText = Magnet.startContent;
+        this.contentDiv.innerHTML = Magnet.startContent;
+        this.contentDiv.onclick = (e) => { e.preventDefault() }
         div.append(this.contentDiv);
 
         document.body.appendChild(div);
@@ -121,6 +133,15 @@ class Magnet {
         this.div.parentNode.removeChild(this.div);
         yeetMagnet(this.id);
     }
+
+    public editContent(): void {
+        this.contentDiv.innerHTML = tinymce.activeEditor.getContent();
+        document.getElementById("editor").style.display = "none";
+    }
+
+    get getContent(): string {
+        return this.contentDiv.innerHTML;
+    }
 }
 
 let magnets: Array<Magnet> = [];
@@ -128,6 +149,14 @@ let magnets: Array<Magnet> = [];
 function yeetMagnet(id: number): void {
     magnets = magnets.filter((val) => { return val.id != id });
     document.getElementById("on").innerText = "On: " + magnets.length.toString();
+}
+
+function editMagnet(magnet: Magnet): void {
+    tinymce.activeEditor.setContent(magnet.getContent);
+    let editor = document.getElementById("editor") as HTMLDivElement;
+    editor.style.display = "block";
+    editor.style.zIndex = (magnet.getZ + 1).toString();
+    document.getElementById("saveEdit").onclick = () => { magnet.editContent() };
 }
 
 export { Magnet, magnets };

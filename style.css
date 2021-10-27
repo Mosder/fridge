@@ -31,16 +31,24 @@ p {
     border: 1px solid black;
     cursor: pointer;
     padding: 20px;
+    background-color: #fff;
 }
-.del {
+.del, .edit {
     position: absolute;
     top: 3px;
-    right: 3px;
     width: 17px;
     height: 17px;
     cursor: pointer;
     border: none;
+}
+.del {
+    right: 3px;
     background: url("icons/del.png");
+    background-size: 17px;
+}
+.edit {
+    left: 3px;
+    background: url("icons/edit.png");
     background-size: 17px;
 }
 .resizer {
@@ -57,4 +65,31 @@ p {
     overflow: auto;
     width: 100%;
     height: 100%;
+}
+#editor {
+    position: fixed;
+    width: 70vw;
+    left: 50%;
+    transform: translate(-50%);
+    top: 10vh;
+    display: none;
+}
+.content > * {
+    position: relative;
+    left: 0;
+}
+#saveEdit, #cancelEdit {
+    width: 25px;
+    height: 25px;
+    margin: 2px;
+    cursor: pointer;
+    border: none;
+}
+#saveEdit {
+    background: url("icons/save.png");
+    background-size: 25px;
+}
+#cancelEdit {
+    background: url("icons/del.png");
+    background-size: 25px;
 }
