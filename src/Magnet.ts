@@ -45,7 +45,6 @@ class Magnet {
         this.contentDiv = document.createElement("div");
         this.contentDiv.className = "content";
         this.contentDiv.innerHTML = Magnet.startContent;
-        this.contentDiv.onclick = (e) => { e.preventDefault() }
         div.append(this.contentDiv);
 
         document.body.appendChild(div);
