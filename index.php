@@ -13,11 +13,18 @@
 </head>
 
 <body>
-    <button id="add"></button>
-    <p id="total">Total: 0</p>
-    <p id="on">On: 0</p>
-    <div id="editor">
-        <textarea id="tinymce"></textarea>
+    <div id="fridge">
+        <button id="add"></button>
+        <p id="total">Total: 0</p>
+        <p id="remaining">Remaining: 0</p>
+        <div id="editor">
+            <textarea id="tinymce"></textarea>
+        </div>
+    </div>
+    <div id="getter">
+        <label>Enter fridge name:</label>
+        <input id="input" type="text"/>
+        <button id="get"></button>
     </div>
 </body>
 

@@ -1,4 +1,6 @@
 import * as tinymce from "tinymce";
+import { validate } from "../node_modules/schema-utils/declarations/validate";
+import { fridge, dbMagnet, dbChangeMagnet, dbDeleteMagnet } from "./dbStuff";
 
 class Magnet {
     private x: number;
@@ -12,12 +14,21 @@ class Magnet {
     static startOffset: number = 40;
     static startContent: string = "NEW JOB!!!";
 
-    constructor(id: number) {
+    constructor(id: number, x?: number, y?: number, z?: number, width?: number, height?: number, content?: string) {
         this.id = id;
         this.div = this.createDiv();
-        this.resize(Magnet.startSize, Magnet.startSize);
-        this.move(Magnet.startOffset, Magnet.startOffset);
-        this.getOnTop();
+        if (x == undefined) {
+            this.resize(Magnet.startSize, Magnet.startSize);
+            this.move(Magnet.startOffset, Magnet.startOffset);
+            this.getOnTop();
+        }
+        else {
+            this.resize(width, height);
+            this.move(x, y);
+            this.div.style.zIndex = z.toString();
+            console.log(content);
+            this.contentDiv.innerHTML = content;
+        }
     }
 
     private createDiv(): HTMLDivElement {
@@ -94,6 +105,7 @@ class Magnet {
                 document.onmouseup = null;
                 document.onmousemove = null;
                 this.color("#fff");
+                dbChangeMagnet(fridge, this.getDbMagnet);
             };
 
             let offsetX = e.clientX - this.x;
@@ -115,6 +127,7 @@ class Magnet {
             document.onmouseup = null;
             document.onmousemove = null;
             this.color("#fff");
+            dbChangeMagnet(fridge, this.getDbMagnet);
         };
 
         document.onmousemove = (e) => { this.resizerResize(e) };
@@ -136,18 +149,38 @@ class Magnet {
     public editContent(): void {
         this.contentDiv.innerHTML = tinymce.activeEditor.getContent();
         document.getElementById("editor").style.display = "none";
+        dbChangeMagnet(fridge, this.getDbMagnet);
     }
 
     get getContent(): string {
         return this.contentDiv.innerHTML;
+    }
+
+    get getDbMagnet(): dbMagnet {
+        return {
+            IDofFridge: fridge.IDofFridge,
+            IDofFridgeMagnet: this.id,
+            X: this.x,
+            Y: this.y,
+            Z: this.getZ,
+            Width: this.width,
+            Height: this.height,
+            Content: this.getContent.replace(/>\n</g, "><")
+        }
     }
 }
 
 let magnets: Array<Magnet> = [];
 
 function yeetMagnet(id: number): void {
+    for (let magnet of magnets) {
+        if (magnet.id == id) {
+            dbDeleteMagnet(fridge, magnet.getDbMagnet);
+            break;
+        }
+    }
     magnets = magnets.filter((val) => { return val.id != id });
-    document.getElementById("on").innerText = "On: " + magnets.length.toString();
+    document.getElementById("remaining").innerText = "Remaining: " + (--fridge.Remaining).toString();
 }
 
 function editMagnet(magnet: Magnet): void {

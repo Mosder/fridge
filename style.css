@@ -11,7 +11,7 @@ p {
 #total {
     top: 10px;
 }
-#on {
+#remaining {
     top: 30px;
 }
 #add {
@@ -91,5 +91,35 @@ p {
 }
 #cancelEdit {
     background: url("icons/del.png");
+    background-size: 25px;
+}
+#fridge {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    display: none;
+}
+#getter {
+    position: absolute;
+    width: 300px;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+#getter > label {
+    font-size: xx-large;
+}
+#input {
+    width: 260px;
+}
+#get {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    border: none;
+    background: url("icons/ok.png");
     background-size: 25px;
 }
