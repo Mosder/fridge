@@ -1,3 +1,4 @@
+import * as tinymce from "tinymce";
 import { Magnet, magnets } from "./Magnet";
 
 let totalAmount = 0;

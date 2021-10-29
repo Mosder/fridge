@@ -1,3 +1,5 @@
+import * as tinymce from "tinymce";
+
 class Magnet {
     private x: number;
     private y: number;
