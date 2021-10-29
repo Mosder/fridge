@@ -1,6 +1,7 @@
 import * as tinymce from "tinymce";
 import { validate } from "../node_modules/schema-utils/declarations/validate";
 import { fridge, dbMagnet, dbChangeMagnet, dbDeleteMagnet } from "./dbStuff";
+import { Buffer } from "buffer";
 
 class Magnet {
     private x: number;
@@ -165,7 +166,7 @@ class Magnet {
             Z: this.getZ,
             Width: this.width,
             Height: this.height,
-            Content: this.getContent.replace(/>\n</g, "><")
+            Content: encodeURIComponent(this.getContent.replace(/>\n</g, "><"))
         }
     }
 }
@@ -173,6 +174,7 @@ class Magnet {
 let magnets: Array<Magnet> = [];
 
 function yeetMagnet(id: number): void {
+    fridge.Remaining--;
     for (let magnet of magnets) {
         if (magnet.id == id) {
             dbDeleteMagnet(fridge, magnet.getDbMagnet);
@@ -180,7 +182,7 @@ function yeetMagnet(id: number): void {
         }
     }
     magnets = magnets.filter((val) => { return val.id != id });
-    document.getElementById("remaining").innerText = "Remaining: " + (--fridge.Remaining).toString();
+    document.getElementById("remaining").innerText = "Remaining: " + (fridge.Remaining).toString();
 }
 
 function editMagnet(magnet: Magnet): void {

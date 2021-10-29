@@ -26,63 +26,46 @@ else if (isset($_GET['getM'])) {
     $sth->bindValue(1, $id, PDO::PARAM_INT);
     $sth->execute();
     $magnets = $sth->fetchAll(PDO::FETCH_ASSOC);
-    for ($i = 0; $i < count($magnets); $i++) {
-        $magnets[$i]['Content'] = $magnets[$i]['Content'];
-    }
     echo json_encode($magnets);
 }
 else if (isset($_GET['add'])) {
-    $data = getData($_GET['add']);
-    updateFridge($dbh, $data['f']);
+    updateFridge($dbh, $_GET);
     $sth = $dbh->prepare("INSERT INTO magnets(IDofFridge, IDofFridgeMagnet, X, Y, Z, Width, Height, Content)
         values(:IDofFridge, :IDofFridgeMagnet, :X, :Y, :Z, :Width, :Height, :Content)");
-    foreach ($data['m'] as $key => $val) {
-        $sth->bindValue(":" . $key, $val, PDO::PARAM_STR);
+    foreach ($_GET as $key => $val) {
+        if ($key != "Name" && $key != "Total" && $key != "Remaining" && $key != "add") {
+            $sth->bindValue(":" . $key, $val, PDO::PARAM_STR);
+        }
     }
     $sth->execute();
     echo json_encode("ok");
 }
 else if (isset($_GET['change'])) {
-    $data = getData($_GET['change']);
-    updateFridge($dbh, $data['f']);
+    updateFridge($dbh, $_GET);
     $sth = $dbh->prepare("UPDATE magnets SET X = :X, Y = :Y, Z = :Z, Width = :Width, Height = :Height,
         Content = :Content WHERE IDofFridge = :IDofFridge AND IDofFridgeMagnet = :IDofFridgeMagnet");
-    foreach ($data['m'] as $key => $val) {
-        $sth->bindValue(":" . $key, $val, PDO::PARAM_STR);
+    $i = 0;
+    foreach ($_GET as $key => $val) {
+        if ($key != "Name" && $key != "Total" && $key != "Remaining" && $key != "change") {
+            $sth->bindValue(":" . $key, $val, PDO::PARAM_STR);
+        }
     }
     $sth->execute();
     echo json_encode("ok");
 }
 else if (isset($_GET['delete'])) {
-    $data = getData($_GET['delete']);
-    updateFridge($dbh, $data['f']);
+    updateFridge($dbh, $_GET);
     $sth = $dbh->prepare("DELETE FROM magnets WHERE IDofFridge = ? AND IDofFridgeMagnet = ?");
-    $sth->bindValue(1, $data['m']['IDofFridge'], PDO::PARAM_STR);
-    $sth->bindValue(2, $data['m']['IDofFridgeMagnet'], PDO::PARAM_STR);
+    $sth->bindValue(1, $_GET['IDofFridge'], PDO::PARAM_STR);
+    $sth->bindValue(2, $_GET['IDofFridgeMagnet'], PDO::PARAM_STR);
     $sth->execute();
     echo json_encode("ok");
 }
 
-function getData($query) {
-    $query = explode('|', $query);
-    $fridge = array();
-    foreach(explode(',', $query[0]) as $x) {
-        $x = explode(':', $x);
-        $fridge[$x[0]] = $x[1];
-    }
-    $magnet = array();
-    foreach(explode(',', $query[1]) as $x) {
-        $x = explode(':', $x);
-        $magnet[$x[0]] = $x[1];
-        if ($x[0] == "Content")
-            $magnet[$x[0]] = $x[1];
-    }
-    return array("f" => $fridge, "m" => $magnet);
-}
-function updateFridge($dbh, $fridge) {
+function updateFridge($dbh, $get) {
     $sth = $dbh->prepare('UPDATE fridges SET Total = ?, Remaining = ? WHERE IDofFridge = ?');
-    $sth->bindValue(1, $fridge['Total'], PDO::PARAM_STR);
-    $sth->bindValue(2, $fridge['Remaining'], PDO::PARAM_STR);
-    $sth->bindValue(3, $fridge['IDofFridge'], PDO::PARAM_STR);
+    $sth->bindValue(1, $get['Total'], PDO::PARAM_STR);
+    $sth->bindValue(2, $get['Remaining'], PDO::PARAM_STR);
+    $sth->bindValue(3, $get['IDofFridge'], PDO::PARAM_STR);
     $sth->execute();
 }

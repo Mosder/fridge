@@ -35,6 +35,7 @@ async function start() {
     }
     document.getElementById("total").innerText = "Total: " + fridge.Total.toString();
     document.getElementById("remaining").innerText = "Remaining: " + fridge.Remaining.toString();
+    console.log(fridge.Remaining);
 
     document.getElementById("getter").style.display = "none";
     document.getElementById("fridge").style.display = "block";

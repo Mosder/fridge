@@ -1,3 +1,5 @@
+import { JsxEmit } from "../node_modules/typescript/lib/typescript";
+
 interface dbFridge {
     readonly IDofFridge: number;
     readonly Name: string;
@@ -40,19 +42,20 @@ async function getMagnets(id: number) {
 
 function dbAddMagnet(fridge: dbFridge, magnet: dbMagnet): void {
     let query = getQuery(fridge, magnet);
-    fetch(`fetch.php?add=${query}`);
+    fetch(`fetch.php?add=1&${query}`);
 }
 function dbChangeMagnet(fridge: dbFridge, magnet: dbMagnet): void {
     let query = getQuery(fridge, magnet);
-    fetch(`fetch.php?change=${query}`);
+    fetch(`fetch.php?change=1&${query}`);
 }
 function dbDeleteMagnet(fridge: dbFridge, magnet: dbMagnet): void {
     let query = getQuery(fridge, magnet);
-    fetch(`fetch.php?delete=${query}`);
+    fetch(`fetch.php?delete=1&${query}`);
 }
-function getQuery(fridge: dbFridge, magnet: dbMagnet) {
-    return `${JSON.stringify(fridge)}|${JSON.stringify(magnet)}`
-        .replace(/[{}]/g, "").replace(/"/g, "");
+function getQuery(fridge: dbFridge, magnet: dbMagnet): string {
+    return `IDofFridge=${fridge.IDofFridge}&Name=${fridge.Name}&Total=${fridge.Total}&Remaining=${fridge.Remaining}
+        &IDofFridgeMagnet=${magnet.IDofFridgeMagnet}&X=${magnet.X}&Y=${magnet.Y}&Z=${magnet.Z}
+        &Width=${magnet.Width}&Height=${magnet.Height}&Content=${magnet.Content}`;
 }
 
 export { fridge, dbMagnet, getFridge, getMagnets, dbAddMagnet, dbChangeMagnet, dbDeleteMagnet };
