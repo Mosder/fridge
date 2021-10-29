@@ -1,5 +1,3 @@
-import { JsxEmit } from "../node_modules/typescript/lib/typescript";
-
 interface dbFridge {
     readonly IDofFridge: number;
     readonly Name: string;

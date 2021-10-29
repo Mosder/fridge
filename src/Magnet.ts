@@ -1,7 +1,5 @@
 import * as tinymce from "tinymce";
-import { validate } from "../node_modules/schema-utils/declarations/validate";
 import { fridge, dbMagnet, dbChangeMagnet, dbDeleteMagnet } from "./dbStuff";
-import { Buffer } from "buffer";
 
 class Magnet {
     private x: number;
